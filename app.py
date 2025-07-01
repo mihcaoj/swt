@@ -4,16 +4,19 @@ from meteostat import Point, Daily, Stations
 
 st.set_page_config(
     page_title="SwissWeatherTracker",
-    page_icon="static/favicon.ico"
+    page_icon="static/favicon.ico",
+    # initial_sidebar_state="collapsed"
 )
 st.logo('static/swt-logo-transparent.png', size="large")
 st.header("Swiss Weather Data Visualizer", divider="gray")
 
-# Fetch Swiss stations
-stations = Stations()
-stations = stations.region('CH')
-swiss_stations = stations.fetch()
-swiss_stations = swiss_stations.dropna(subset=['name'])
+# Fetch Swiss stations - time-to-live is 24h (86400 seconds)
+@st.cache_data(ttl=86400) 
+def get_swiss_stations():
+    swiss_stations = Stations().region('CH').fetch()
+    return swiss_stations.dropna(subset=['name'])
+
+swiss_stations = get_swiss_stations()
 
 # Let user select a station
 station_names = swiss_stations['name'].tolist()
@@ -34,8 +37,12 @@ selected_station = swiss_stations[swiss_stations['name'] == selected_station_nam
 # Create a Point from the station's latitude/longitude
 station_point = Point(selected_station['latitude'], selected_station['longitude'])
 
-# Fetch data for this station
-station_data = Daily(station_point, start=selected_start_date, end=selected_end_date).fetch()
+# Fetch data for this station - time-to-live is 24h (86400 seconds)
+@st.cache_data(ttl=86400)
+def get_station_data(_point, start_date, end_date):
+    return Daily(_point, start=start_date, end=end_date).fetch()
+
+station_data = get_station_data(station_point, selected_start_date, selected_end_date)
 
 # Check if data is available
 if 'tavg' and 'tmin' and 'tmax' in station_data.columns:
