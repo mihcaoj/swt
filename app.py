@@ -39,13 +39,14 @@ station_point = Point(selected_station['latitude'], selected_station['longitude'
 
 # Fetch data for this station - time-to-live is 24h (86400 seconds)
 @st.cache_data(ttl=86400)
-def get_station_data(_point, start_date, end_date):
-    return Daily(_point, start=start_date, end=end_date).fetch()
+def get_station_data(lat, lon, start_date, end_date):
+    point = Point(lat, lon)
+    return Daily(point, start=start_date, end=end_date).fetch()
 
-station_data = get_station_data(station_point, selected_start_date, selected_end_date)
+station_data = get_station_data(selected_station['latitude'], selected_station['longitude'], selected_start_date, selected_end_date)
 
 # Check if data is available
-if 'tavg' and 'tmin' and 'tmax' in station_data.columns:
+if all(col in station_data.columns for col in ['tavg', 'tmin', 'tmax']):
     st.subheader(f"Temperature in {selected_station_name} ({selected_start_date.strftime('%d.%m.%Y')}-{selected_end_date.strftime('%d.%m.%Y')})")
     temp_data = station_data[['tavg', 'tmin', 'tmax']].rename(columns={
         'tavg': 'Average Temperature',
@@ -53,28 +54,28 @@ if 'tavg' and 'tmin' and 'tmax' in station_data.columns:
         'tmax': 'Maximum Temperature'
     })
     st.line_chart(temp_data, x_label='Time', y_label='Temperature (°C)')
-if 'prcp' in station_data.columns:
+if all(col in station_data.columns for col in ['prcp']):
     st.subheader(f"Precipitation in {selected_station_name} ({selected_start_date.strftime('%d.%m.%Y')}-{selected_end_date.strftime('%d.%m.%Y')})")
     precipitation_data = station_data[['prcp']]
     st.bar_chart(precipitation_data, x_label='Time', y_label='Precipitation (mm)')
-if 'snow' in station_data.columns:
+if all(col in station_data.columns for col in ['snow']):
     st.subheader(f"Snow in {selected_station_name} ({selected_start_date.strftime('%d.%m.%Y')}-{selected_end_date.strftime('%d.%m.%Y')})")
     snow_data = station_data[['snow']]
     st.bar_chart(snow_data, x_label='Time', y_label='Depth (mm)')
-if 'wspd' and 'wpgt' in station_data.columns:
+if all(col in station_data.columns for col in ['wspd', 'wpgt']):
     st.subheader(f"Wind in {selected_station_name} ({selected_start_date.strftime('%d.%m.%Y')}-{selected_end_date.strftime('%d.%m.%Y')})")
     wind_data = station_data[['wspd', 'wpgt']].rename(columns= {
         'wspd': 'Wind Speed',
         'wpgt': 'Wind Gusts'
     })
     st.area_chart(wind_data, x_label='Time', y_label='Kilometers per hour (km/h)')
-if 'pres' in station_data.columns:
+if all(col in station_data.columns for col in ['pres']):
     st.subheader(f"Sea-level Air Pressure in {selected_station_name} ({selected_start_date.strftime('%d.%m.%Y')}-{selected_end_date.strftime('%d.%m.%Y')})")
     pres_data = station_data[['pres']]
     st.line_chart(pres_data, x_label='Time', y_label='Sea-level air pressure (hPa)')
-if 'tsun' in station_data.columns:
+if all(col in station_data.columns for col in ['tsun']):
     st.subheader(f"Sunshine in {selected_station_name} ({selected_start_date.strftime('%d.%m.%Y')}-{selected_end_date.strftime('%d.%m.%Y')})")
     sun_data = station_data[['tsun']]
     st.line_chart(sun_data, x_label='Time', y_label='Total sunshine (minutes)')
-else:
+if station_data.empty:
     st.warning(f"No weather data available for {selected_station_name}")
