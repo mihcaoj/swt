@@ -56,9 +56,13 @@ if 'wspd' and 'wpgt' in station_data.columns:
         'wpgt': 'Wind Gusts'
     })
     st.area_chart(wind_data, x_label='Time', y_label='Kilometers per hour (km/h)')
+if 'pres' in station_data.columns:
+    st.subheader(f"Sea-level Air Pressure in {selected_station_name} from {selected_start_date.strftime('%d.%m.%Y')} to {selected_end_date.strftime('%d.%m.%Y')}")
+    pres_data = station_data[['pres']]
+    st.line_chart(pres_data, x_label='Time', y_label='Sea-level air pressure (hPa)')
 if 'tsun' in station_data.columns:
-    st.subheader(f"Daily Sunshine in {selected_station_name} from {selected_start_date.strftime('%d.%m.%Y')} to {selected_end_date.strftime('%d.%m.%Y')}")
+    st.subheader(f"Sunshine in {selected_station_name} from {selected_start_date.strftime('%d.%m.%Y')} to {selected_end_date.strftime('%d.%m.%Y')}")
     sun_data = station_data[['tsun']]
-    st.line_chart(sun_data, x_label='Time', y_label='Minutes')
+    st.line_chart(sun_data, x_label='Time', y_label='Sunshine total in minutes')
 else:
     st.warning(f"No weather data available for {selected_station_name}")
