@@ -1,8 +1,8 @@
 import streamlit as st 
 from datetime import datetime, timedelta
-from meteostat import Point, Daily, Stations, Hourly
+from meteostat import Point, Daily, Stations
 
-st.header("Weather Data in Switzerland", divider="gray")
+st.header("Swiss Weather Data Visualizer", divider="gray")
 
 # Fetch Swiss stations
 stations = Stations()
@@ -16,8 +16,8 @@ selected_station_name = st.selectbox("Select a Weather station:", station_names)
 
 # Let user select a start/end date
 one_year_ago = datetime.today() - timedelta(days=365)
-selected_start_date = st.date_input(label="Select a Start Date:", value=one_year_ago, max_value="today")
-selected_end_date = st.date_input(label="Select a End Date:", max_value="today")
+selected_start_date = st.date_input(label="Select a Start Date:", value=one_year_ago, max_value="today", format="DD/MM/YYYY")
+selected_end_date = st.date_input(label="Select a End Date:", max_value="today", format="DD/MM/YYYY")
 
 # Convert date to datetime
 selected_start_date = datetime.combine(selected_start_date, datetime.min.time())
@@ -45,6 +45,10 @@ if 'prcp' in station_data.columns:
     st.subheader(f"Precipitation in {selected_station_name} from {selected_start_date.strftime('%d.%m.%Y')} to {selected_end_date.strftime('%d.%m.%Y')}")
     precipitation_data = station_data[['prcp']]
     st.bar_chart(precipitation_data, x_label='Time', y_label='Precipitation (mm)')
+if 'snow' in station_data.columns:
+    st.subheader(f"Snow in {selected_station_name} from {selected_start_date.strftime('%d.%m.%Y')} to {selected_end_date.strftime('%d.%m.%Y')}")
+    snow_data = station_data[['snow']]
+    st.bar_chart(snow_data, x_label='Time', y_label='Depth (mm)')
 if 'wspd' and 'wpgt' in station_data.columns:
     st.subheader(f"Wind in {selected_station_name} from {selected_start_date.strftime('%d.%m.%Y')} to {selected_end_date.strftime('%d.%m.%Y')}")
     wind_data = station_data[['wspd', 'wpgt']].rename(columns= {
@@ -52,5 +56,9 @@ if 'wspd' and 'wpgt' in station_data.columns:
         'wpgt': 'Wind Gusts'
     })
     st.area_chart(wind_data, x_label='Time', y_label='Kilometers per hour (km/h)')
+if 'tsun' in station_data.columns:
+    st.subheader(f"Daily Sunshine in {selected_station_name} from {selected_start_date.strftime('%d.%m.%Y')} to {selected_end_date.strftime('%d.%m.%Y')}")
+    sun_data = station_data[['tsun']]
+    st.line_chart(sun_data, x_label='Time', y_label='Minutes')
 else:
     st.warning(f"No weather data available for {selected_station_name}")
