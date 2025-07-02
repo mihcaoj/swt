@@ -5,8 +5,16 @@ from meteostat import Point, Daily, Stations
 st.set_page_config(
     page_title="Swiss Weather Tracker",
     page_icon="static/favicon.ico",
-    # initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed"
 )
+with st.sidebar:
+    st.header("About")
+    st.markdown(
+        '''Swiss Weather Tracker (SWT) lets users visualize weather data from stations across Switzerland.'''
+    )
+    st.markdown(
+        '''It displays data from the [Meteostat Python library](https://dev.meteostat.net/python/).'''
+    )
 st.logo('static/swt-logo.png', size="large")
 st.header("Swiss Weather Data Visualizer", divider="gray")
 

@@ -1,11 +1,11 @@
 # Swiss Weather Tracker
 
-SWT lets users visualize data from weather stations all across Switzerland.
+Swiss Weather Tracker (SWT) lets users visualize weather data from stations across Switzerland.
 
-It is built using Streamlit and fetches its data from the Meteostat API.
+The app is built with Streamlit and uses the [Meteostat Python library](https://dev.meteostat.net/python/) to access historical weather and climate data aggregated from various public sources.
 
 ## Features
 
 - **Weather Station Selection**: Select individual weather stations.
 - **Start/End Date Selection**: Select a date range of to visualize weather metrics within a specific time span.
-- **Metric Filtering**: Filter by different weather metrics.
+- **Metric Filtering**: Filter by different weather metrics such as temperature, precipitation, and more.
