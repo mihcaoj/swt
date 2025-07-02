@@ -59,19 +59,19 @@ def render_temperature(data, station_name, start_date, end_date):
             'tmin': 'Minimum Temperature',
             'tmax': 'Maximum Temperature'
         })
-        st.line_chart(temp_data, x_label='Time', y_label='Temperature (°C)')
+        st.line_chart(temp_data, x_label='Time', y_label='Temperature (°C)', color=["#1d4ed8", "#e63946", "#0ea5e9"], height=500)
 
 def render_precipitation(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['prcp']):
         st.subheader(f"Precipitation in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
         precipitation_data = data[['prcp']]
-        st.bar_chart(precipitation_data, x_label='Time', y_label='Precipitation (mm)')
+        st.bar_chart(precipitation_data, x_label='Time', y_label='Precipitation (mm)', height=500)
 
 def render_snow(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['snow']):
         st.subheader(f"Snow in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
         snow_data = data[['snow']]
-        st.bar_chart(snow_data, x_label='Time', y_label='Depth (mm)')
+        st.bar_chart(snow_data, x_label='Time', y_label='Depth (mm)', height=500)
 
 def render_wind(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['wspd', 'wpgt']):
@@ -80,19 +80,19 @@ def render_wind(data, station_name, start_date, end_date):
             'wspd': 'Wind Speed',
             'wpgt': 'Wind Gusts'
         })
-        st.area_chart(wind_data, x_label='Time', y_label='Kilometers per hour (km/h)')
+        st.area_chart(wind_data, x_label='Time', y_label='Kilometers per hour (km/h)', height=500)
 
 def render_pressure(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['pres']):
         st.subheader(f"Sea-level Air Pressure in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
         pres_data = data[['pres']]
-        st.line_chart(pres_data, x_label='Time', y_label='Sea-level air pressure (hPa)')
+        st.line_chart(pres_data, x_label='Time', y_label='Sea-level air pressure (hPa)', height=500)
 
 def render_sunshine(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['tsun']):
         st.subheader(f"Sunshine in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
         sun_data = data[['tsun']]
-        st.line_chart(sun_data, x_label='Time', y_label='Total sunshine (minutes)')
+        st.line_chart(sun_data, x_label='Time', y_label='Total sunshine (minutes)', height=500)
 
 renderers = {
     "Temperature": render_temperature,
