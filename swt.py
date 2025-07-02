@@ -20,12 +20,12 @@ swiss_stations = get_swiss_stations()
 
 # Let user select a station
 station_names = swiss_stations['name'].tolist()
-selected_station_name = st.selectbox("Select Weather station:", station_names)
+selected_station_name = st.selectbox("Weather Station:", station_names)
 
 # Let user select a start/end date
 one_year_ago = datetime.today() - timedelta(days=365)
-selected_start_date = st.date_input(label="Select Start Date:", value=one_year_ago, max_value="today", format="DD/MM/YYYY")
-selected_end_date = st.date_input(label="Select End Date:", max_value="today", format="DD/MM/YYYY")
+selected_start_date = st.date_input(label="Start Date:", value=one_year_ago, max_value="today", format="DD/MM/YYYY")
+selected_end_date = st.date_input(label="End Date:", max_value="today", format="DD/MM/YYYY")
 
 # Convert date to datetime
 selected_start_date = datetime.combine(selected_start_date, datetime.min.time())
