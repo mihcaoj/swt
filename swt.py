@@ -51,9 +51,21 @@ station_data = get_station_data(selected_station['latitude'], selected_station['
 if station_data.empty:
     st.warning(f"No weather data available for {selected_station_name}")
 
+def highlight_text(content):
+    '''Return content wrapped in a subtle span to highlight it'''
+    return (
+        f"<span style='border: 1.5px solid rgba(200, 200, 200, 0.4);"
+        "padding: 3px 7px; border-radius: 5px;"
+        "background-color: rgba(220, 220, 220, 0.07);"
+        "color: inherit;'>"
+        f"{content}"
+        "</span>"
+    )
+
 def render_temperature(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['tavg', 'tmin', 'tmax']):
-        st.subheader(f"Temperature in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        highlighted_text = highlight_text(f"{station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        st.markdown(f"<h3>Temperature in {highlighted_text}</h3>", unsafe_allow_html=True)
         temp_data = data[['tavg', 'tmin', 'tmax']].rename(columns={
             'tavg': 'Average Temperature',
             'tmin': 'Minimum Temperature',
@@ -63,19 +75,22 @@ def render_temperature(data, station_name, start_date, end_date):
 
 def render_precipitation(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['prcp']):
-        st.subheader(f"Precipitation in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        highlighted_text = highlight_text(f"{station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        st.markdown(f"<h3>Precipitation in {highlighted_text}</h3>", unsafe_allow_html=True)
         precipitation_data = data[['prcp']]
         st.bar_chart(precipitation_data, x_label='Time', y_label='Precipitation (mm)', height=500)
 
 def render_snow(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['snow']):
-        st.subheader(f"Snow in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        highlighted_text = highlight_text(f"{station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        st.markdown(f"<h3>Snow in {highlighted_text}</h3>", unsafe_allow_html=True)
         snow_data = data[['snow']]
         st.bar_chart(snow_data, x_label='Time', y_label='Depth (mm)', height=500)
 
 def render_wind(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['wspd', 'wpgt']):
-        st.subheader(f"Wind in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        highlighted_text = highlight_text(f"{station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        st.markdown(f"<h3>Wind in {highlighted_text}</h3>", unsafe_allow_html=True)
         wind_data = data[['wspd', 'wpgt']].rename(columns= {
             'wspd': 'Wind Speed',
             'wpgt': 'Wind Gusts'
@@ -84,13 +99,15 @@ def render_wind(data, station_name, start_date, end_date):
 
 def render_pressure(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['pres']):
-        st.subheader(f"Sea-level Air Pressure in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        highlighted_text = highlight_text(f"{station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        st.markdown(f"<h3>Pressure in {highlighted_text}</h3>", unsafe_allow_html=True)
         pres_data = data[['pres']]
         st.line_chart(pres_data, x_label='Time', y_label='Sea-level air pressure (hPa)', height=500)
 
 def render_sunshine(data, station_name, start_date, end_date):
     if all(col in data.columns for col in ['tsun']):
-        st.subheader(f"Sunshine in {station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        highlighted_text = highlight_text(f"{station_name} ({start_date.strftime('%d.%m.%Y')}-{end_date.strftime('%d.%m.%Y')})")
+        st.markdown(f"<h3>Sunshine in {highlighted_text}</h3>", unsafe_allow_html=True)
         sun_data = data[['tsun']]
         st.line_chart(sun_data, x_label='Time', y_label='Total sunshine (minutes)', height=500)
 
